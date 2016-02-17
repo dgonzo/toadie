@@ -7,6 +7,17 @@ __version__ = "0.1.0"
 
 import click
 from .lib.dependencies import Tools
+import logging
+import os
+import errno
+import re
+import subprocess
+import sys
+import pkg_resources
+
+
+log = logging.getLogger()
+log.setLevel(logging.DEBUG)
 
 tools = Tools()
 
@@ -67,16 +78,85 @@ def readySystem(cloud):
 @click.command()
 @click.argument('project_name')
 def createProject(project_name):
-    """Create a new project directory and dev environment called PROJECT_NAME."""
-    # Create project README.rst
+    """Create a new PROJECT_NAME directory.
 
-    # Create docker-machine project-name
+    Create a new project directory and dev environment called PROJECT_NAME.
+    """
+    # Create PROJECT_NAME dir.
+    if project_name == ".":
+        project_dir = os.path.split(os.getcwd())[-1]
+        log.debug("Project name from parent directory: {}".format(
+            project_dir))
+    else:
+        project_dir = project_name
+    try:
+        os.mkdir(project_dir)
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            msg = """
+            ERROR: {}!
+            Cannot create PROJECT_NAME: `{project_dir}`.
+            Try a different name or move/delete `{project_dir}`.
+            """.format(e.strerror, project_dir=project_dir)
+            click.secho(msg, fg='red')
+            sys.exit()
+        else:
+            raise
+#    # Create project README.md
+#    with open(os.path.join(project_dir,'README.md'), 'w') as f:
+#        f.write("# {}".format(project_name.upper().replace('_',' ')))
+#    # Create conda env
+#    tool_name = re.sub(r'\s','-',project_name)
+#    click.echo(
+#        "Creating conda env {} python=3.5".format(tool_name))
+#    subprocess.getoutput(
+#        'conda create --name {}'.format(tool_name))
+#    subprocess.getoutput(
+#        'conda env export > {}/environment.yml'.format(project_dir))
+#    # Create docker-machine project-name
+#    click.echo(
+#        "Creating docker-machine env {}. May take a minute.".format(
+#            tool_name))
+#    subprocess.getoutput(
+#        'docker-machine create --driver virtualbox {}'.format(tool_name))
+#    # Create dotenv file
+#    with open(os.path.join(project_dir,'.env'), 'w') as f:
+#        f.write('DEBUG=true')
+#        f.write('EOF')
+#    # Copy scripts
 
-    # Create dotenv file
-
+    pkg_scripts = [
+        'build-tag-push.py'
+    ]
+    project_scripts = os.path.join(project_dir,'bin')
+    os.mkdir(project_scripts)
+    resource_package = __name__
+    for script in pkg_scripts:
+        resource_path = os.path.join('templates', script)
+        template = pkg_resources.resource_string(
+            resource_package, resource_path)
+        with open(
+            os.path.join(project_scripts,script), 'wb'
+        ) as f:
+                f.write(template)
     # Create Procfile
-
-    click.echo("Created: {}".format(project_name))
+    click.secho("The following commands have been added to `Procfile`:")
+    commands = [
+        'up: docker-machine up -d',
+        'down: docker-machine stop',
+        'clean: docker-machine rm',
+        'build: docker-machine build',
+        'build-tag-push: python build-tag-push.py'
+    ]
+    with open(os.path.join(project_dir,'Procfile'), 'w') as f:
+        for cmd in commands:
+            f.write(cmd)
+            cmds = re.match(r'^(.*): (.*)', cmd)
+            click.secho(
+                """\nshell: {}\nexecute with: honcho start {}""".format(
+                    cmds.group(2),
+                    cmds.group(1),
+                ), fg='blue')
 
 
 @click.command()
