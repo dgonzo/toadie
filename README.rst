@@ -2,10 +2,10 @@
 toadie
 ######
 
-Toadie is a microservices framework that includes everything needed to create task queue based microservices using the ambassador pattern. toadie supports the concepts of `service` and `task`.
+Toadie is a microservices framework that includes everything needed to create task queue based microservices using the ambassador pattern to run on a compute cluster (like Elastic Container Service or Kubernetes). Toadie supports the concepts of `service` and `task`.
 
     * Service: Long-running application or worker
-    * Task: Short-running application or worker
+    * Task: Short-running application or worker, which often requires additional compute resorces be added to cluster
 
 Toadie is designed with analytic processes and smaller teams in mind.
 
@@ -32,15 +32,15 @@ Getting Started
 
     .. code:: shell
 
-       $ toadie readySystem
+       $ toadie ready-system
 
-3. At the command prompt, create a new toadie project and a `service`:
+3. At the command prompt, create a new toadie project and add a `service`:
 
     .. code:: shell
 
-       $ toadie createProject myproject
+       $ toadie create-project myproject
        $ cd myproject
-       $ toadie createService myservice
+       $ toadie create-service myservice
 
     where "myproject" is the project name and where "myservice" is the name of your service.
 
