@@ -2,7 +2,7 @@ __author__ = "David 'Gonzo' Gonzalez"
 __email__ = "davidbgonzalez@gmail.com"
 __copyright__ = "Copyright (C) 2016 David Gonzalez"
 __license__ = "Apache License 2.0"
-__version__ = "0.1.0"
+__version__ = "0.1.0a1"
 
 
 import click
