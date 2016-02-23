@@ -22,6 +22,8 @@ Getting Started
 
     .. code:: shell
 
+        # using pip
+        $ pip install toadie
         # using conda
         $ conda install -c https://conda.anaconda.org/gonzo toadie
 
