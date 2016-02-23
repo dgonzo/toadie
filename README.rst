@@ -2,7 +2,7 @@
 toadie
 ######
 
-Toadie is a microservices framework that includes everything needed to create microservices using the ambassador pattern to run on a compute cluster (like Elastic Container Service or Kubernetes). Toadie supports the concepts of `service` and `task`.
+Toadie is a microservices framework that includes everything needed to create microservices and run on a compute cluster using the ambassador pattern. Compute cluster can be Elastic Container Service, Kubernetes, or similar. Toadie supports the concepts of `service` and `task`.
 
     * Service: Long-running application or worker
     * Task: Short-running application or worker, which often requires additional compute resorces be added to cluster
