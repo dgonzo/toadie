@@ -2,7 +2,7 @@
 toadie
 ######
 
-Toadie is a microservices framework that includes everything needed to create task queue based microservices using the ambassador pattern to run on a compute cluster (like Elastic Container Service or Kubernetes). Toadie supports the concepts of `service` and `task`.
+Toadie is a microservices framework that includes everything needed to create microservices using the ambassador pattern to run on a compute cluster (like Elastic Container Service or Kubernetes). Toadie supports the concepts of `service` and `task`.
 
     * Service: Long-running application or worker
     * Task: Short-running application or worker, which often requires additional compute resorces be added to cluster
@@ -23,8 +23,6 @@ Getting Started
 
     .. code:: shell
 
-        # using pip
-        $ pip install toadie
         # using conda
         $ conda install -c https://conda.anaconda.org/gonzo toadie
 
@@ -48,7 +46,7 @@ Getting Started
 
     .. code:: shell
 
-       $ toadie up
+       $ honcho start up
 
 5. Deploy your stack on your chosen cloud:
 
