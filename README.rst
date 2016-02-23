@@ -11,8 +11,7 @@ Toadie is designed with analytic processes and smaller teams in mind.
 
 Toadie is inspired by django and rails and gummi bears.
 
-.. image:: Toadwart.png
-   :target: http://vignette2.wikia.nocookie.net/disney/images/4/4d/Toadwart.png
+.. image:: artwork/Toadwart.png
    :alt: Adventures of the Gummi Bears' "Toadie"
 
 ###############
