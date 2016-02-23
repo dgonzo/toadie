@@ -96,3 +96,6 @@ Temporary\ Items
 *.csv
 *.tsv
 *.pkl
+
+# conda builds
+conda.builds/
