@@ -2,7 +2,7 @@ __author__ = "David 'Gonzo' Gonzalez"
 __email__ = "davidbgonzalez@gmail.com"
 __copyright__ = "Copyright (C) 2016 David Gonzalez"
 __license__ = "Apache License 2.0"
-__version__ = "0.1.0a1"
+__version__ = "0.1.1a1"
 
 
 import click
@@ -16,6 +16,7 @@ import subprocess
 import sys
 import pkg_resources
 import json
+import yaml
 
 
 log = logging.getLogger(__name__)
@@ -367,6 +368,21 @@ def generateStackComponent(component_name, force, interface, component_type):
         component.create_rest_component()
     elif interface == 'hybrid':
         component.create_hybrid_component()
+
+    with open(os.path.join(project_path, 'docker-compose.yml'), 'r') as _:
+        docker_compose = yaml.load(_)
+    services = docker_compose['services'].keys()
+    if 'errlogger' not in services:
+        errlogger = StackComponent('errlogger', 'service', project_path,
+                                   resource_package=RESOURCE_PACKAGE)
+        errlogger.create_queue_component()
+        click.echo('Created errlogger service.')
+
+    if 'logger' not in services:
+        logger = StackComponent('logger', 'service', project_path,
+                                resource_package=RESOURCE_PACKAGE)
+        logger.create_queue_component()
+        click.echo('Created logger service.')
 
     click.secho("[{}] {} component created: {}".format(interface.upper(),
                                                        component_type.capitalize(),

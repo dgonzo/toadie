@@ -9,9 +9,11 @@ requirements:
     build:
         - python
         - setuptools
-        - click
     run:
         - python
+        - click
+        - PyYAML
+        - honcho
 
 about:
     home: https://github.com/dgonzo/toadie.git

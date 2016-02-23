@@ -16,7 +16,9 @@ setup(
     version = headers['__version__'],
     py_modules=['toadie'],
     install_requires=[
-        'Click',
+        'click>=6.3',
+        'PyYAML>=3.11',
+        'honcho>=0.6.6',
     ],
     entry_points = {
         "console_scripts": ['toadie = toadie.toadie:main']
