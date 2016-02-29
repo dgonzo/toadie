@@ -170,7 +170,6 @@ def createProject(project_name):
     # Create PROJECT_NAME dir.
     if project_name == ".":
         project_dir = os.path.split(os.getcwd())[-1]
-        log.debug("Project name from parent directory: {}".format(project_dir))
     else:
         project_dir = project_name
     try:
@@ -262,36 +261,42 @@ def updateDotenv():
         `.env` and `dotenv.example` files. Returns missing values in each file.
     """
 
-    log.debug("{}".format(sys._getframe().f_code.co_name))
     # Parse environment variables out of project files.
     if not os.path.isfile('.env'):
         click.secho("No `.env` file found. Make sure you are in your project directory.", fg='red')
         sys.exit()
     project_env_var = re.compile(r'os.environ.get\([\'\"](.*?)[\'\"]')
     for dir_contents in os.walk('.'):
-        log.debug(dir_contents[2])
         for filename in dir_contents[2]:
             with open(os.path.join(dir_contents[0],filename), 'r') as _:
                 contents = _.read()
                 project_env_vars = set(project_env_var.findall(contents))
+
     # Get set of variables in .env.
     dotenv_var = re.compile(r'^(.*)=')
+    dot_env_vars = set()
     with open('.env', 'r') as _:
-        contents = _.read()
-        dot_env_vars = set(dotenv_var.findall(contents))
+        contents = _.readlines()
+        for line in contents:
+            dot_env_vars.add(dotenv_var.findall(line)[0])
     missing_dotenv_vars = project_env_vars - dot_env_vars
-    # Add missing to .env
+
+   # Add missing to .env
     if len(missing_dotenv_vars) > 0:
         click.echo("The following variables were missing in `.env` and set to '__blank__'.")
     for var in sorted(missing_dotenv_vars):
         with open('.env', 'a') as _:
             _.write("{}=__blank__\n".format(var))
             click.secho("{} set to __blank__. Update before running.".format(var), fg='yellow')
+
     # Get set of missing varialbes in dotenv.example
+    example_env_vars = set()
     with open('dotenv.example', 'r') as _:
-        contents = _.read()
-        example_env_vars = set(dotenv_var.findall(contents))
+        contents = _.readlines()
+        for line in contents:
+            example_env_vars.add(dotenv_var.findall(line)[0])
     missing_example_vars = (project_env_vars | dot_env_vars) - example_env_vars
+
     # Add missing to dotenv.example
     if len(missing_example_vars) > 0:
         click.echo("The following variables were missing in `dotenv.example` and added.")
@@ -299,6 +304,7 @@ def updateDotenv():
         with open('dotenv.example', 'a') as _:
             _.write("{}=\n".format(var))
             click.secho("{}".format(var), fg='blue')
+    click.secho("Environment files updated.", fg='green')
 
 
 @click.command()

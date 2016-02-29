@@ -1,6 +1,6 @@
 package:
     name: toadie
-    version: "0.1.0a1"
+    version: "0.1.1a1"
 
 source:
     git_url: https://github.com/dgonzo/toadie.git
