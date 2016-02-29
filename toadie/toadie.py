@@ -6,8 +6,8 @@ __version__ = "0.1.1a1"
 
 
 import click
-from .lib.dependencies import Tools
-from .lib.components import StackComponent
+from .libs.dependencies import Tools
+from .libs.components import StackComponent
 import logging
 import os
 import errno
